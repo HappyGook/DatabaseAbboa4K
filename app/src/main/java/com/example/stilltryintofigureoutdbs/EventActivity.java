@@ -1,5 +1,6 @@
 package com.example.stilltryintofigureoutdbs;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
@@ -13,6 +14,7 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +28,7 @@ public class EventActivity extends AppCompatActivity {
     SQLiteDatabase db;
     CalendarView calendarView;
 
-    String timet;
+    String timet,selectedDate;
 
 
     @Override
@@ -50,11 +52,36 @@ public class EventActivity extends AppCompatActivity {
 
         time.setIs24HourView(true);
 
+        selectedDate=sdf.format(calendarView.getDate());
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                month++;
+                if(month<10){
+                    selectedDate=String.valueOf(dayOfMonth)+"/0"+String.valueOf(month)+"/"+String.valueOf(year);
+                }
+                else{
+                    selectedDate=String.valueOf(dayOfMonth)+"/"+String.valueOf(month)+"/"+String.valueOf(year);
+                }
+            }
+        });
+        if(time.getMinute()<10) {
+            timet = String.valueOf(time.getHour()) + ":0" + String.valueOf(time.getMinute());
+        }
+        else{
+            timet=String.valueOf(time.getHour())+":"+String.valueOf(time.getMinute());
+        }
+
         time.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                timet=String.valueOf(hourOfDay)+":"+String.valueOf(minute);
+                if(minute<10) {
+                    timet = String.valueOf(hourOfDay) + ":0" + String.valueOf(minute);
+                } else{
+                    timet = String.valueOf(hourOfDay) + ":" + String.valueOf(minute);
+                }
             }
         });
 
@@ -62,16 +89,20 @@ public class EventActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedDate = sdf.format(new Date(calendarView.getDate()));
-                ContentValues values=new ContentValues();
-                values.put(OpenHelper.COLUMN_HEADER,name.getText().toString());
-                values.put(OpenHelper.COLUMN_DESCRIPTION,desc.getText().toString());
-                values.put(OpenHelper.COLUMN_TIME,timet);
-                values.put(OpenHelper.COLUMN_DATE,selectedDate);
-                db.insert(OpenHelper.TABLE_NAME,null,values);
+                if(name.equals(null)||desc.equals(null)){
+                    Toast.makeText(getApplicationContext(),"Пожалуйста, введите полные данные",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    ContentValues values = new ContentValues();
+                    values.put(OpenHelper.COLUMN_HEADER, name.getText().toString());
+                    values.put(OpenHelper.COLUMN_DESCRIPTION, desc.getText().toString());
+                    values.put(OpenHelper.COLUMN_TIME, timet);
+                    values.put(OpenHelper.COLUMN_DATE, selectedDate);
+                    db.insert(OpenHelper.TABLE_NAME, null, values);
 
-                Intent intent=new Intent(EventActivity.this,MainActivity.class);
-                startActivity(intent);
+                    Intent intent = new Intent(EventActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }

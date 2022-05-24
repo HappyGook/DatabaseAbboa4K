@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             while (cursor.moveToNext()){
                 maps.add(new ObjectItem(cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getString(3)));
+                        cursor.getString(3),cursor.getString(4)));
             }
 
             adapter=new MeinAdapter(this, maps);

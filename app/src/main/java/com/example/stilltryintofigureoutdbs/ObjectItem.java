@@ -1,12 +1,14 @@
 package com.example.stilltryintofigureoutdbs;
 
 public class ObjectItem {
-    private String header,desc,time;
+    private String header,desc,time,date;
 
-    public ObjectItem(String header,String desc,String time) {
+
+    public ObjectItem(String header, String desc, String time, String date) {
         this.header=header;
         this.desc=desc;
         this.time=time;
+        this.date=date;
     }
 
     public String getHeader() {
@@ -32,5 +34,15 @@ public class ObjectItem {
     public void setTime(String header) {
         this.time = time;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+
 
 }

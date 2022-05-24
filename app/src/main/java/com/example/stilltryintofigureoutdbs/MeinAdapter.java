@@ -49,6 +49,7 @@ public class MeinAdapter extends ArrayAdapter<String> {
         TextView header = (TextView)view.findViewById(R.id.Iheader);
         TextView time = (TextView)view.findViewById(R.id.Itime);
         TextView desc = (TextView)view.findViewById(R.id.Idesc);
+        TextView date = (TextView)view.findViewById(R.id.Idate);
 
 
         // получаем элемент со списка
@@ -58,6 +59,7 @@ public class MeinAdapter extends ArrayAdapter<String> {
         header.setText(objectItem.getHeader().toString());
         time.setText(objectItem.getTime().toString());
         desc.setText(objectItem.getDesc().toString());
+        date.setText(objectItem.getDate().toString());
 
         return view;
     }
